@@ -1,45 +1,51 @@
 pipeline {
     agent any
 
-    environment {
-        NODE_HOME = '/usr/local/bin' // Path to your Node.js installation
-        GIT_CREDENTIALS_ID = 'your-git-credentials-id'
-    }
-
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://gitlab.com/iac2312807/task1.git', credentialsId: env.GIT_CREDENTIALS_ID
+                git 'https://github.com/sekharr606/task1.git'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                echo 'Building...'
+                // Add your build steps here
+                // For example, if you are using Maven:
+                // sh 'mvn clean install'
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Test') {
             steps {
-                sh 'npm install'
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                sh 'npm test'
+                echo 'Testing...'
+                // Add your test steps here
+                // For example, if you are using Maven:
+                // sh 'mvn test'
             }
         }
 
         stage('Deploy') {
             steps {
-                sh 'npm start &'
+                echo 'Deploying...'
+                // Add your deployment steps here
+                // For example, if you are deploying to a server:
+                // sh 'scp target/*.jar user@server:/path/to/deploy'
             }
         }
     }
 
     post {
         always {
-            // Actions that always run after the pipeline completes
             echo 'Cleaning up...'
-            deleteDir()
+            // Add cleanup steps here
         }
         success {
-            echo 'Pipeline completed successfully!'
+            echo 'Pipeline succeeded!'
         }
         failure {
-            echo 'Pi
+            echo 'Pipeline failed!'
+        }
+    }
+}
